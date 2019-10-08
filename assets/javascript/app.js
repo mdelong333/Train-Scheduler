@@ -12,7 +12,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var dataRef = firebase.database();
+var database = firebase.database();
 
 var name = "";
 var destination = "";
@@ -28,18 +28,47 @@ $("#add-train").on("click", function(event) {
     time = $("#time-input").val().trim();
     frequency = $("#frequency-input").val().trim();
 
-    dataRef.ref().push({
+    var newTrain = {
         name: name,
         destination: destination,
         time: time,
         frequency: frequency,
-    });
+    };
 
+    database.ref().push(newTrain);
+
+    clearInputs()
+
+    console.log(newTrain);
 });
 
+//function to clear input fields
+function clearInputs() {
+    $("#name-input").val("");
+    $("#destination-input").val("");
+    $("#time-input").val("");
+    $("#frequency-input").val("");
+}
+
 //gets snapshot of data added - appends newly input info to the schedule
-dataRef.ref().on("child_added", function(childSnapshot) {
+database.ref().on("child_added", function(childSnapshot) {
     console.log(childSnapshot.val());
 
-    
+    var trainName = childSnapshot.val().name;
+    var trainDest = childSnapshot.val().destination;
+    var trainTime = childSnapshot.val().time;
+    var trainFreq = childSnapshot.val().frequency;
+
+    //calculate next arrival time
+    //calculate how many minutes until arrival
+
+    var newRow = $("<tr>").append(`
+    <td>${trainName}</td>
+    <td>${trainDest}</td>
+    <td>${trainFreq}</td>
+    <td>Next Arrial</td>
+    <td>Minutes Away</td>
+    `);
+
+    $("#current-schedule > tbody").append(newRow);
 })
