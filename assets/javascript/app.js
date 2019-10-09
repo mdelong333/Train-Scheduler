@@ -14,19 +14,14 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-var name = "";
-var destination = "";
-var time = "";
-var frequency = "";
-
 //grabs input data and stores in variable - pushes data to database
 $("#add-train").on("click", function(event) {
     event.preventDefault();
 
-    name = $("#name-input").val().trim();
-    destination = $("#destination-input").val().trim();
-    time = $("#time-input").val().trim();
-    frequency = $("#frequency-input").val().trim();
+    var name = $("#name-input").val().trim();
+    var destination = $("#destination-input").val().trim();
+    var time = $("#time-input").val().trim();
+    var frequency = $("#frequency-input").val().trim();
 
     var newTrain = {
         name: name,
@@ -59,15 +54,40 @@ database.ref().on("child_added", function(childSnapshot) {
     var trainTime = childSnapshot.val().time;
     var trainFreq = childSnapshot.val().frequency;
 
-    //calculate next arrival time
-    //calculate how many minutes until arrival
+    console.log("train time", trainTime);
 
+    //format train time
+    var firstTrainTime = moment(trainTime, "HH:mm");
+    console.log("first time", moment(firstTrainTime).format("HH:mm"));
+
+    //current timestamp
+    var currentTime = moment();
+    console.log("current time", moment(currentTime).format("HH:mm"));
+
+    //calculate time difference between first train time and current time in minutes
+    var timeDiff = moment().diff(moment(firstTrainTime), "m");
+    console.log("time difference", timeDiff);
+
+    //get remainder between timediff and trainfrequency
+    var timeRemainder = timeDiff % trainFreq;
+    console.log("time remainder", timeRemainder);
+
+    //calculate minutes until next train
+    var minTilTrain = trainFreq - timeRemainder;
+    console.log("minutes til next train", minTilTrain);
+
+    //calculate next arrival time
+    var arrivalTime = moment().add(minTilTrain, "m").format("HH:mm");
+    console.log("arrival time", arrivalTime);
+
+    //add new train data in own row to the table
     var newRow = $("<tr>").append(`
     <td>${trainName}</td>
     <td>${trainDest}</td>
     <td>${trainFreq}</td>
-    <td>Next Arrial</td>
-    <td>Minutes Away</td>
+    <td>${firstTrainTime}</td>
+    <td>${arrivalTime}</td>
+    <td>${minTilTrain}</td>
     `);
 
     $("#current-schedule > tbody").append(newRow);
