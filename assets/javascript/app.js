@@ -95,9 +95,10 @@ database.ref().on("child_added", function(childSnapshot) {
 
     $("#current-schedule > tbody").append(newRow);
     
+    //function to remove table row from html and associated data from database on button click
     $(".remove").on("click", function(event) {
         $(this).parent().prevAll().parent().remove();
         database.ref().child(childSnapshot.key).remove();
-    })
+    })    
 })
 
