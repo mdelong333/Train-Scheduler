@@ -1,0 +1,44 @@
+.jumbotron {
+ background-color: whitesmoke;
+ background-image: url(../images/train.jpg);
+ background-repeat: no-repeat;
+ background-size: 100% 100%;
+ margin-top: 10px;
+ text-align: center;
+ border: 2px solid rgb(105, 193, 248);
+ border-radius: 5px;
+ padding: 100px;
+ display: grid;
+}
+
+body {
+    background-image: url(../images/Jodhpur.jpg)
+}
+
+.card-header {
+    background-image: url(../images/Cool\ Sky.png);
+    color: whitesmoke;
+}
+
+.schedule {
+    margin: 20px;
+    display: grid;
+}
+
+.input {
+    margin: 30px;
+    padding: 15px;
+    display: grid;
+}
+
+.form-group {
+    margin: 15px;
+}
+
+#add-train {
+    background-color: rgb(43,131,187);
+}
+
+#add-train:hover {
+    opacity: .8;
+}

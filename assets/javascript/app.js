@@ -18,6 +18,8 @@ var database = firebase.database();
 $("#add-train").on("click", function(event) {
     event.preventDefault();
 
+    //add alert all fields are mandatory if left empty
+
     var name = $("#name-input").val().trim();
     var destination = $("#destination-input").val().trim();
     var time = $("#time-input").val().trim();
@@ -35,6 +37,7 @@ $("#add-train").on("click", function(event) {
     clearInputs()
 
     console.log(newTrain);
+    
 });
 
 //function to clear input fields
@@ -53,11 +56,11 @@ database.ref().on("child_added", function(childSnapshot) {
     var trainDest = childSnapshot.val().destination;
     var trainTime = childSnapshot.val().time;
     var trainFreq = childSnapshot.val().frequency;
-
+   
     console.log("train time", trainTime);
 
     //format train time
-    var firstTrainTime = moment(trainTime, "HH:mm");
+    var firstTrainTime = moment(trainTime, "HH:mm").subtract(1, "years");
     console.log("first time", moment(firstTrainTime).format("HH:mm"));
 
     //current timestamp
@@ -85,10 +88,12 @@ database.ref().on("child_added", function(childSnapshot) {
     <td>${trainName}</td>
     <td>${trainDest}</td>
     <td>${trainFreq}</td>
-    <td>${firstTrainTime}</td>
     <td>${arrivalTime}</td>
     <td>${minTilTrain}</td>
+    <td><button class="btn btn-dark remove">X</button></td>
     `);
 
     $("#current-schedule > tbody").append(newRow);
+    
 })
+
