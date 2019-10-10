@@ -90,10 +90,14 @@ database.ref().on("child_added", function(childSnapshot) {
     <td>${trainFreq}</td>
     <td>${arrivalTime}</td>
     <td>${minTilTrain}</td>
-    <td><button class="btn btn-dark remove">X</button></td>
+    <td><button class="btn btn-dark remove">Remove</button></td>
     `);
 
     $("#current-schedule > tbody").append(newRow);
     
+    $(".remove").on("click", function(event) {
+        $(this).parent().prevAll().parent().remove();
+        database.ref().child(childSnapshot.key).remove();
+    })
 })
 
